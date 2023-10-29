@@ -1,0 +1,65 @@
+<div class="bg-white p-3 shadow-sm rounded-sm dark:bg-gray-900">
+    <div class="flex items-center space-x-2 font-semibold text-gray-900 leading-8 dark:text-white">
+        <ng-icon name="heroUser" class="text-xl"></ng-icon>
+        <span class="tracking-wide">About me</span>
+    </div>
+    <div class="text-gray-700 dark:text-white">
+        <div class="grid md:grid-cols-2 text-sm">
+            <div class="grid grid-cols-2">
+                <div class="px-4 py-2 font-semibold">Username</div>
+                <div class="px-4 py-2">{{currentUser?.name}}</div>
+            </div>
+            <div class="grid grid-cols-2">
+                <div class="px-4 py-2 font-semibold">Email</div>
+                <div class="px-4 py-2">{{currentUser?.email}}</div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="bg-white p-3 shadow-sm rounded-sm dark:bg-gray-900">
+    <div class="flex items-center space-x-2 font-semibold text-gray-900 leading-8 dark:text-white">
+        <ng-icon name="heroPencilSquare" class="text-xl"></ng-icon>
+        <span class="tracking-wide">Change password</span>
+    </div>
+    <div class="text-gray-700 dark:text-white">
+        <div class="grid md:grid-cols-2 text-sm">
+            <div class="grid grid-cols-2">
+                <div class="px-4 py-2 font-semibold">Username</div>
+                <div class="px-4 py-2">{{currentUser?.name}}</div>
+            </div>
+            <div class="grid grid-cols-2">
+                <div class="px-4 py-2 font-semibold">Email</div>
+                <div class="px-4 py-2">{{currentUser?.email}}</div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="bg-white p-3 shadow-sm rounded-sm dark:bg-gray-900">
+    <div class="grid grid-cols-2">
+        <div class="pr-5">
+            <div class="flex items-center space-x-2 font-semibold text-gray-900 leading-8 mb-3 dark:text-white">
+                <ng-icon name="heroDocumentText" class="text-xl"></ng-icon>
+                <span class="tracking-wide">Submitted Homeworks</span>
+            </div>
+            <ul class="list-inside space-y-2">
+                <li>
+                    <div class="dark:text-white text-gray-900">Homeworks will be shown here</div>
+                    <div class="dark:text-gray-300 text-xs">Today</div>
+                </li>
+            </ul>
+        </div>
+        <div class="pl-5">
+            <div class="flex items-center space-x-2 font-semibold text-gray-900 leading-8 mb-3 dark:text-white">
+                <ng-icon name="heroAcademicCap" class="text-xl"></ng-icon>
+                <span class="tracking-wide">Passed Lessons</span>
+            </div>
+            <ul class="list-inside space-y-2">
+                <li>
+                    <div class="dark:text-white text-gray-900">Lessons will be shown here</div>
+                    <div class="dark:text-gray-300 text-xs">Today</div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- End of Experience and education grid -->
+</div>

@@ -35,7 +35,7 @@ class LessonListView(generics.ListAPIView):
     filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
 
 
-class LessonGet(generics.ListAPIView):
+class LessonGet(generics.RetrieveAPIView):
     permission_classes = (IsAuthenticated,)
     authentication_class = JSONWebTokenAuthentication
 

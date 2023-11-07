@@ -21,8 +21,11 @@ import {
     heroQuestionMarkCircle,
     heroAcademicCap,
     heroPencilSquare,
-    heroUser, heroDocumentText
+    heroUser, heroDocumentText, heroLockClosed, heroArrowTopRightOnSquare
 } from "@ng-icons/heroicons/outline";
+import {CourseOverviewComponent} from './components/course-overview/course-overview.component';
+import {CourseItemHeader} from "./components/course-item-header/course-item-header.component";
+import {LessonViewComponent} from './components/lesson-view/lesson-view.component';
 
 @NgModule({
     declarations: [
@@ -32,7 +35,10 @@ import {
         HomeComponent,
         ProfileComponent,
         CourseListComponent,
-        CourseItemLargeComponent
+        CourseItemLargeComponent,
+        CourseOverviewComponent,
+        CourseItemHeader,
+        LessonViewComponent
     ],
     imports: [
         BrowserModule,
@@ -44,7 +50,16 @@ import {
             positionClass: 'toast-bottom-right',
             preventDuplicates: true,
         }),
-        NgIconsModule.withIcons({heroUsers, heroQuestionMarkCircle, heroAcademicCap, heroPencilSquare, heroUser, heroDocumentText}),
+        NgIconsModule.withIcons({
+            heroUsers,
+            heroQuestionMarkCircle,
+            heroAcademicCap,
+            heroPencilSquare,
+            heroUser,
+            heroDocumentText,
+            heroLockClosed,
+            heroArrowTopRightOnSquare,
+        }),
         // ToastrModule added
     ],
     providers: [httpInterceptorProviders],

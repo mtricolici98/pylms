@@ -18,6 +18,7 @@ export class ProfileComponent implements OnInit {
         this.currentUser = this.storageService.getUser();
     }
 
-    protected readonly heroAcademicCap = heroAcademicCap;
-    protected readonly heroPencilSquare = heroPencilSquare;
+
+
+
 }

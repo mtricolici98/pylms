@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from django.db import models
+from django.utils import timezone
 
 
 class Course(models.Model):
@@ -33,13 +34,11 @@ class HomeWork(models.Model):
 class Lesson(models.Model):
     id = models.AutoField(primary_key=True)
     order = models.IntegerField(default=1, null=False)
-    title = models.CharField(max_length=25)
+    title = models.CharField(max_length=255)
     course = models.ForeignKey(Course, on_delete=models.PROTECT, null=False)
-    available_from = models.DateTimeField(default=datetime.now)
+    available_from = models.DateTimeField(default=timezone.now)
     content = models.TextField()
     homework = models.ForeignKey(HomeWork, on_delete=models.PROTECT)
 
     class Meta:
         unique_together = ['title', 'course']
-
-

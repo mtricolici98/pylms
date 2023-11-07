@@ -17,6 +17,7 @@ export class AppComponent implements OnInit {
     username?: string;
 
     eventBusSub?: Subscription;
+    navbarExtended: boolean = false;
 
     constructor(
         private storageService: StorageService,

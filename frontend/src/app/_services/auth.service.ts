@@ -39,6 +39,16 @@ export class AuthService {
         );
     }
 
+    changePassword(new_password: string): Observable<any> {
+        return this.http.post(
+            AUTH_API + 'change_password',
+            {
+                new_password,
+            },
+            httpOptions
+        );
+    }
+
     logout(): void {
         this.storageService.clean();
         window.location.reload();

@@ -194,6 +194,7 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
 }
 
+
 JWT_AUTH = {
     "JWT_ENCODE_HANDLER": "rest_framework_jwt.utils.jwt_encode_handler",
     "JWT_DECODE_HANDLER": "rest_framework_jwt.utils.jwt_decode_handler",

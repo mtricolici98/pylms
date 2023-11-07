@@ -22,12 +22,15 @@ export class HttpRequestInterceptor implements HttpInterceptor {
     }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        req = req.clone({
-            withCredentials: true,
-            setHeaders: {
-                'HTTP_AUTHORIZATION': `JWT ${this.storageService.getToken()}`
-            }
-        });
+        if (this.storageService.isLoggedIn()) {
+            req = req.clone({
+                withCredentials: true,
+                setHeaders: {
+                    'Authorization': `Bearer ${this.storageService.getToken()}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+        }
 
         return next.handle(req).pipe(
             catchError((error) => {

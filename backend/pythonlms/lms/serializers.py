@@ -21,11 +21,15 @@ class LessonMinSerializer(serializers.ModelSerializer):
 
 
 class CourseSerializer(CourseMinSerializer):
-    lessons = LessonMinSerializer(many=True)
+    lessons = serializers.SerializerMethodField()
 
     class Meta:
         model = Course
         fields = ['id', 'title', 'description', 'image', 'lessons']
+
+    @staticmethod
+    def get_lessons(obj: Course):
+        return LessonMinSerializer(obj.lesson_set.all(), many=True).data
 
 
 class HomeworkTaskSerializer(serializers.ModelSerializer):
@@ -43,6 +47,8 @@ class HomeWorkSerializer(serializers.ModelSerializer):
 
 
 class LessonFullSerializer(serializers.ModelSerializer):
+    course = CourseMinSerializer()
+
     class Meta:
         model = Lesson
         fields = ['id', 'title', 'course', 'available_from', 'content']

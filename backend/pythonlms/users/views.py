@@ -1,4 +1,6 @@
+from django.contrib.auth.decorators import login_required
 from rest_framework import status
+from rest_framework.decorators import api_view, authentication_classes
 from rest_framework.generics import CreateAPIView, RetrieveAPIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -42,15 +44,6 @@ class UserLoginView(RetrieveAPIView):
         return Response(response, status=status_code)
 
 
-class UserView(RetrieveAPIView):
-    permission_classes = (AllowAny,)
-    serializer_class = UserDetailSerializer
-
-    def get(self, request, email):
-        serializer = UserDetailSerializer(request.user)
-        return Response(serializer.data)
-
-
 class UserProfileView(RetrieveAPIView):
     permission_classes = (IsAuthenticated,)
     authentication_class = JSONWebTokenAuthentication
@@ -79,3 +72,12 @@ class UserProfileView(RetrieveAPIView):
                 "error": str(e),
             }
         return Response(response, status=status_code)
+
+
+@api_view(['POST'])
+@authentication_classes([JSONWebTokenAuthentication])
+def change_password(request):
+    user = request.user
+    new_password = request.data('new_password')
+    user.set_password(new_password)
+    user.save()

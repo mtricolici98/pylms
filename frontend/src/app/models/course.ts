@@ -1,9 +1,9 @@
-class HomeworkTask {
+export class HomeworkTask {
     task_name: string;
     task_text: string;
 }
 
-class Homework {
+export class Homework {
     id: number;
     content: string;
     attachments: any[];
@@ -11,11 +11,11 @@ class Homework {
     homework_tasks: HomeworkTask;
 }
 
-class Lesson {
+export class Lesson {
     id: number;
     order: number;
     title: string;
-    course: number;
+    course: Course;
     available_from: Date;
     content: number;
     homework: Homework;

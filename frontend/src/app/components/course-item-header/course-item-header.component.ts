@@ -3,11 +3,11 @@ import {Course} from "../../models/course";
 import {Router} from "@angular/router";
 
 @Component({
-    selector: 'app-course-item-large',
-    templateUrl: './course-item-large.component.html',
-    styleUrls: ['./course-item-large.component.css']
+    selector: 'app-course-item-header',
+    templateUrl: './course-item-header.component.html',
+    styleUrls: ['./course-item-header.component.css']
 })
-export class CourseItemLargeComponent {
+export class CourseItemHeader {
 
     @Input()
     courseItem: Course;

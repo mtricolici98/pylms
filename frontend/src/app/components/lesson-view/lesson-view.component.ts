@@ -1,9 +1,15 @@
 import {Component} from '@angular/core';
-import {Course, Lesson} from "../../models/course";
-import {CourseService} from "../../_services/course.service";
-import {ActivatedRoute} from "@angular/router";
+import {Lesson} from "../../models/course";
+import {ActivatedRoute, Router} from "@angular/router";
 import {ToastrService} from "ngx-toastr";
 import {LessonService} from "../../_services/lesson.service";
+import {Title} from "@angular/platform-browser";
+
+class Heading {
+    id: string;
+    title: string;
+    subheading: boolean;
+}
 
 @Component({
     selector: 'app-lesson-view',
@@ -15,7 +21,11 @@ export class LessonViewComponent {
     lesson: Lesson;
     loading: boolean;
 
-    constructor(private lessonService: LessonService, private route: ActivatedRoute, private tostr: ToastrService) {
+    headings: Heading[];
+    navbarExtended = false;
+
+    constructor(private lessonService: LessonService, private route: ActivatedRoute,
+                private tostr: ToastrService, private title: Title, private router: Router) {
     }
 
     ngOnInit(): void {
@@ -39,6 +49,7 @@ export class LessonViewComponent {
                 next: (el) => {
                     this.lesson = el;
                     this.loading = false;
+                    this.title.setTitle(this.lesson.title);
                 },
                 error: error => {
                     this.tostr.error(error.error?.message || error.error);
@@ -49,5 +60,26 @@ export class LessonViewComponent {
             });
     }
 
+    getHeadings() {
+        console.log(this);
+    }
 
+    onHeadingsChange(elements: undefined | NodeListOf<Element>) {
+        this.headings = [];
+        elements?.forEach(
+            (element) => {
+                this.headings.push({
+                    id: element.getAttribute('name') || '',
+                    title: element?.textContent?.toString() || "??",
+                    subheading: element.tagName == 'h2'
+                });
+            }
+        );
+    }
+
+    navigateToAnchor(id: string) {
+        this.router.navigate(
+            [], {fragment: id}
+        );
+    }
 }

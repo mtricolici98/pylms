@@ -8,7 +8,7 @@ export class Homework {
     content: string;
     attachments: any[];
     link: string;
-    homework_tasks: HomeworkTask;
+    homework_tasks: HomeworkTask[];
 }
 
 export class Lesson {
@@ -17,7 +17,7 @@ export class Lesson {
     title: string;
     course: Course;
     available_from: Date;
-    content: number;
+    content: string;
     homework: Homework;
 }
 

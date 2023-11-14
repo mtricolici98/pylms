@@ -18,6 +18,7 @@ export class AppComponent implements OnInit {
 
     eventBusSub?: Subscription;
     navbarExtended: boolean = false;
+    darkMode = true;
 
     constructor(
         private storageService: StorageService,

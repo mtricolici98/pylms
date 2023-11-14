@@ -41,6 +41,11 @@ else:
 # Application definition
 
 INSTALLED_APPS = [
+    "import_export",
+    "unfold",  # before django.contrib.admin
+    "unfold.contrib.filters",  # optional, if special filters are needed
+    "unfold.contrib.forms",  # optional, if special form elements are needed
+    "unfold.contrib.import_export",  # optional, if django-import-export package is used
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -193,7 +198,6 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
 }
-
 
 JWT_AUTH = {
     "JWT_ENCODE_HANDLER": "rest_framework_jwt.utils.jwt_encode_handler",

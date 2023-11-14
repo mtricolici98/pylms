@@ -13,12 +13,15 @@ import {catchError} from 'rxjs/operators';
 import {StorageService} from '../_services/storage.service';
 import {EventBusService} from '../_shared/event-bus.service';
 import {EventData} from '../_shared/event.class';
+import {Router} from "@angular/router";
 
 @Injectable()
 export class HttpRequestInterceptor implements HttpInterceptor {
     private isRefreshing = false;
 
-    constructor(private storageService: StorageService, private eventBusService: EventBusService) {
+    constructor(private storageService: StorageService,
+                private eventBusService: EventBusService,
+                private router: Router) {
     }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -48,15 +51,15 @@ export class HttpRequestInterceptor implements HttpInterceptor {
     }
 
     private handle401Error(request: HttpRequest<any>, next: HttpHandler) {
-        if (!this.isRefreshing) {
-            this.isRefreshing = true;
-
-            if (this.storageService.isLoggedIn()) {
-                this.eventBusService.emit(new EventData('logout', null));
-            }
-        }
-
-        return next.handle(request);
+        this.storageService.clean();
+        this.router.navigate(['/login']);
+        return throwError(() => {
+            return {
+                error: {
+                    message: 'You are not logged in'
+                }
+            };
+        });
     }
 }
 

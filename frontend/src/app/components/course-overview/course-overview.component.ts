@@ -3,6 +3,7 @@ import {Course, Lesson} from "../../models/course";
 import {CourseService} from "../../_services/course.service";
 import {ActivatedRoute} from "@angular/router";
 import {Toast, ToastrService} from "ngx-toastr";
+import {Title} from "@angular/platform-browser";
 
 @Component({
     selector: 'app-course-overview',
@@ -14,7 +15,7 @@ export class CourseOverviewComponent implements OnInit {
     course: Course;
     loading: boolean;
 
-    constructor(private courseService: CourseService, private route: ActivatedRoute, private tostr: ToastrService) {
+    constructor(private courseService: CourseService, private route: ActivatedRoute, private tostr: ToastrService, private title: Title) {
     }
 
     ngOnInit(): void {
@@ -38,6 +39,7 @@ export class CourseOverviewComponent implements OnInit {
                 next: (el) => {
                     this.course = el;
                     this.loading = false;
+                    this.title.setTitle(this.course.title);
                 },
                 error: error => {
                     this.tostr.error(error.error?.message || error.error);

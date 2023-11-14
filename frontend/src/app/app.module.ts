@@ -17,15 +17,21 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {ToastrModule} from "ngx-toastr";
 import {NgIconsModule} from "@ng-icons/core";
 import {
-    heroUsers,
-    heroQuestionMarkCircle,
     heroAcademicCap,
+    heroArrowTopRightOnSquare,
+    heroDocumentText,
+    heroLockClosed,
     heroPencilSquare,
-    heroUser, heroDocumentText, heroLockClosed, heroArrowTopRightOnSquare
+    heroQuestionMarkCircle,
+    heroUser,
+    heroUsers
 } from "@ng-icons/heroicons/outline";
 import {CourseOverviewComponent} from './components/course-overview/course-overview.component';
 import {CourseItemHeader} from "./components/course-item-header/course-item-header.component";
 import {LessonViewComponent} from './components/lesson-view/lesson-view.component';
+import {MarkdownModule} from "ngx-markdown";
+import {MarkdownRendererComponent} from './components/markdown-renderer/markdown-renderer.component';
+import {gfmHeadingId} from "marked-gfm-heading-id";
 
 @NgModule({
     declarations: [
@@ -38,7 +44,8 @@ import {LessonViewComponent} from './components/lesson-view/lesson-view.componen
         CourseItemLargeComponent,
         CourseOverviewComponent,
         CourseItemHeader,
-        LessonViewComponent
+        LessonViewComponent,
+        MarkdownRendererComponent,
     ],
     imports: [
         BrowserModule,
@@ -60,6 +67,11 @@ import {LessonViewComponent} from './components/lesson-view/lesson-view.componen
             heroLockClosed,
             heroArrowTopRightOnSquare,
         }),
+        MarkdownModule.forRoot(
+            {
+                markedExtensions: [gfmHeadingId()],
+            }
+        ),
         // ToastrModule added
     ],
     providers: [httpInterceptorProviders],

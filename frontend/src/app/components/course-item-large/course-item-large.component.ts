@@ -15,8 +15,4 @@ export class CourseItemLargeComponent {
     constructor(private router: Router) {
     }
 
-    navigateToCourse() {
-        this.router.navigate(['course', this.courseItem.id]);
-    }
-
 }

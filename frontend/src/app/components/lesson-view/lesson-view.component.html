@@ -8,9 +8,9 @@
               d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
     </svg>
 </button>
-<div class="flex justify-between">
+<div class="flex">
     <aside id="sidebar-multi-level-sidebar"
-           class="fixed top-0 left-0 z-40 w-auto h-full max-h-full transition-transform sm:translate-x-0 overflow-y-scroll pt-8 bg-gray-50 dark:bg-gray-800 max-w-xs"
+           class="fixed top-0 left-0 z-40 max-w-sm h-full max-h-full transition-transform sm:translate-x-0 overflow-y-scroll overflow-x-hidden pt-8 bg-gray-50 dark:bg-gray-800"
            [class.-translate-x-full]="!navbarExtended"
            aria-label="Sidebar"
     >
@@ -40,21 +40,22 @@
                 <li *ngFor="let head of headings">
                     <ng-container *ngIf="!head.subheading">
                         <a (click)="navigateToAnchor(head.id)"
-                           class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                           class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group cursor-pointer">
                             <span class="flex-1 ml-3 whitespace-nowrap">{{head.title}}</span>
                         </a>
                     </ng-container>
                     <ng-container *ngIf="head.subheading">
                         <a href="#{{head.id}}"
-                           class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                           class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group cursor-pointer">
                             <span class="flex-1 ml-3 whitespace-nowrap">{{head.title}}</span>
                         </a>
                     </ng-container>
                 </li>
             </ul>
-            <ul class="space-y-2 font-medium mb-10">
+            <ul class="space-y-2 font-medium mb-10" *ngIf="lesson.homework">
                 <li class="border-gray-500 border-b-2 border-t-2 mt-5">
-                    <a class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                    <a class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group cursor-pointer"
+                       (click)="navigateToAnchor('homework_head')">
                         <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                              aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                              viewBox="0 0 20 20">
@@ -65,37 +66,48 @@
                         <span class="ml-3">Homework</span>
                     </a>
                 </li>
-                <li *ngFor="let head of lesson?.homework?.homework_tasks">
-                    <a href="#{{head.task_name}}"
-                       class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                        <span class="flex-1 ml-3 whitespace-nowrap">{{head.task_name}}</span>
-                    </a>
-                </li>
-
-                <li>
-                    <a href=""
-                       class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                        <span class="flex-1 ml-3 whitespace-nowrap">Fake task</span>
-                    </a>
-                </li>
-                <li>
-                    <a href=""
-                       class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                        <span class="flex-1 ml-3 whitespace-nowrap">Fake task</span>
-                    </a>
-                </li>
-                <li>
-                    <a href=""
-                       class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                        <span class="flex-1 ml-3 whitespace-nowrap">Fake task</span>
-                    </a>
-                </li>
+                <ng-container *ngIf="!lesson.homework?.enabled">
+                    <li>
+                        <a class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group cursor-not-allowed">
+                            <ng-icon name="heroLockClosed"
+                                     class="text-gray-700 dark:text-gray-400 text-2xl">
+                            </ng-icon>
+                            <span class="text-gray-700 dark:text-gray-400 ml-2">Homework Not Yet Enabled</span>
+                        </a>
+                    </li>
+                </ng-container>
+                <ng-container *ngIf="lesson.homework?.enabled">
+                    <ng-container *ngIf="!lesson.homework?.homework_tasks?.length">
+                        <li>
+                            <a class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group cursor-not-allowed">
+                                <ng-icon name="heroQuestionMarkCircle"
+                                         class="text-gray-700 dark:text-gray-400 text-2xl">
+                                </ng-icon>
+                                <span class="text-gray-700 dark:text-gray-400 ml-2">No tasks</span>
+                            </a>
+                        </li>
+                    </ng-container>
+                    <ng-container *ngIf="lesson.homework?.homework_tasks?.length">
+                        <li *ngFor="let head of lesson?.homework?.homework_tasks">
+                            <a (click)="navigateToAnchor('hw' + head.id)"
+                               class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                                <span class="flex-1 ml-3 whitespace-nowrap">{{head.task_name}}</span>
+                            </a>
+                        </li>
+                    </ng-container>
+                </ng-container>
             </ul>
         </div>
     </aside>
 
-    <div class="p-4 sm:ml-64 lg:max-w-screen-2xl sm:max-w-screen-lg w-full flex flex-wrap items-center justify-between mx-auto">
+    <div class="p-4 sm:ml-96 lg:max-w-screen-2xl sm:max-w-screen-lg w-full flex flex-wrap flex-column items-center justify-between mx-auto">
         <app-markdown-renderer [content]="lesson.content" (headings)="onHeadingsChange($event)">
         </app-markdown-renderer>
+        <div class="w-full" *ngIf="lesson.homework">
+            <app-homework-display [homework]="lesson.homework">
+            </app-homework-display>
+        </div>
+
     </div>
+
 </div>

@@ -1,13 +1,15 @@
 export class HomeworkTask {
+    id: string;
     task_name: string;
     task_text: string;
+    attachments?: Blob;
+    link?: string;
 }
 
 export class Homework {
     id: number;
-    content: string;
-    attachments: any[];
-    link: string;
+    introduction: string;
+    enabled: boolean;
     homework_tasks: HomeworkTask[];
 }
 

@@ -1,4 +1,4 @@
-import {NgModule} from '@angular/core';
+import {NgModule, SecurityContext} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {FormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
@@ -32,6 +32,7 @@ import {LessonViewComponent} from './components/lesson-view/lesson-view.componen
 import {MarkdownModule} from "ngx-markdown";
 import {MarkdownRendererComponent} from './components/markdown-renderer/markdown-renderer.component';
 import {gfmHeadingId} from "marked-gfm-heading-id";
+import {HomeworkDisplayComponent} from "./components/homework-display/homework-display.component";
 
 @NgModule({
     declarations: [
@@ -46,6 +47,7 @@ import {gfmHeadingId} from "marked-gfm-heading-id";
         CourseItemHeader,
         LessonViewComponent,
         MarkdownRendererComponent,
+        HomeworkDisplayComponent
     ],
     imports: [
         BrowserModule,
@@ -69,12 +71,16 @@ import {gfmHeadingId} from "marked-gfm-heading-id";
         }),
         MarkdownModule.forRoot(
             {
+                sanitize: SecurityContext.NONE,
                 markedExtensions: [gfmHeadingId()],
             }
         ),
         // ToastrModule added
     ],
     providers: [httpInterceptorProviders],
+    exports: [
+        MarkdownRendererComponent
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule {

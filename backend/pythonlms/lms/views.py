@@ -1,4 +1,5 @@
 import django_filters
+from django.utils import timezone
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
@@ -39,6 +40,6 @@ class LessonGet(generics.RetrieveAPIView):
     permission_classes = (IsAuthenticated,)
     authentication_class = JSONWebTokenAuthentication
 
-    queryset = Lesson.objects.all()
+    queryset = Lesson.objects.filter(available_from__lte=timezone.now())
     serializer_class = LessonFullSerializer
     lookup_url_kwarg = 'id'

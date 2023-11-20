@@ -20,7 +20,7 @@ export class MarkdownRendererComponent implements OnInit {
     headings = new EventEmitter<NodeListOf<Element> | undefined>();
 
     constructor(private mkds: MarkdownService, @Inject(DOCUMENT) private document: Document) {
-        this.mkds.renderer
+        this.mkds.renderer;
     }
 
     onReady() {
@@ -35,38 +35,22 @@ export class MarkdownRendererComponent implements OnInit {
             escapedText = this.id_prefix + escapedText;
             switch (level) {
                 case 1: {
-                    return `<h1 class="text-5xl font-extrabold dark:text-white mb-2 mt-10" data-id="${escapedText}">` +
-                        '<a data-id="${escapedText}" class="anchor" href="#' + escapedText + '">' +
-                        '<span class="header-link"></span>' +
-                        '</a>' + text +
-                        '</h1><hr class="h-px my-3 bg-gray-200 border-0 dark:bg-gray-700">';
+                    return `<h1 id="${escapedText}" class="text-5xl font-extrabold dark:text-white mb-2 mt-10">${text}</h1>
+                            <hr class="h-px my-3 bg-gray-200 border-0 dark:bg-gray-700">`;
                 }
                 case 2: {
-                    return `<h2 class="text-4xl font-bold dark:text-white mb-1  mt-10" data-id="${escapedText}">` +
-                        '<a data-id="${escapedText}"  id="' + escapedText + '" class="anchor" href="#' + escapedText + '">' +
-                        '<span class="header-link"></span>' +
-                        '</a>' + text +
-                        '</h2><hr class="h-px my-3 bg-gray-200 border-0 dark:bg-gray-700">';
+                    return `<h2 id="${escapedText}" class="text-4xl font-bold dark:text-white mb-1 mt-10">${text}</h2>
+                            <hr class="h-px my-3 bg-gray-200 border-0 dark:bg-gray-700">`;
                 }
                 case 3: {
-                    return `<h3 class="text-3xl font-bold dark:text-white mb-3" data-id="${escapedText}">` +
-                        '<a id="' + escapedText + '" class="anchor" href="#' + escapedText + '">' +
-                        '<span class="header-link"></span>' +
-                        '</a>' + text +
-                        '</h3>';
+                    return `<h3 class="text-3xl font-bold dark:text-white mb-3">${text}</h3>`;
                 }
                 case 4: {
-                    return `<h4 class="text-2xl font-bold dark:text-white mb-1" id="${escapedText}">` +
-                        '<a id="' + escapedText + '" class="anchor" href="#' + escapedText + '">' +
-                        '<span class="header-link"></span>' +
-                        '</a>' + text +
-                        '</h4>';
+                    return `<h4 class="text-2xl font-bold dark:text-white mb-1">${text}</h4>`;
                 }
                 default: {
                     return '<h' + level + ' id="' + escapedText + '" class="mb-2 font-bold tracking-tight text-gray-900 dark:text-white" name="' + escapedText + '">' +
-                        '<a  class="anchor" href="#' + escapedText + '">' +
-                        '<span class="header-link"></span>' +
-                        '</a>' + text +
+                        text +
                         '</h' + level + '>';
 
                 }

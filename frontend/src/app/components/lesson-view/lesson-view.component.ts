@@ -41,7 +41,11 @@ export class LessonViewComponent {
     loadLesson(courseId: string | null) {
         this.loading = true;
         if (!courseId) {
-            // TODO: Navigate to 404
+            this.router.navigate(['/']).then(
+                () => {
+                    this.tostr.error(`Lesson not found`);
+                }
+            );
             return;
         }
         this.lessonService.getLessonById(courseId).subscribe(
@@ -52,7 +56,12 @@ export class LessonViewComponent {
                     this.title.setTitle(this.lesson.title);
                 },
                 error: error => {
-                    this.tostr.error(error.error?.message || error.error);
+                    this.router.navigate(['/']).then(
+                        () => {
+                            this.tostr.error(`Course not found`);
+                        }
+                    );
+                    return;
                 },
                 complete: () => {
                     this.loading = false;
@@ -69,7 +78,7 @@ export class LessonViewComponent {
         elements?.forEach(
             (element) => {
                 this.headings.push({
-                    id: element.getAttribute('name') || '',
+                    id: element.getAttribute('id') || '',
                     title: element?.textContent?.toString() || "??",
                     subheading: element.tagName == 'h2'
                 });

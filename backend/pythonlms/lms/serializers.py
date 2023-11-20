@@ -35,20 +35,27 @@ class CourseSerializer(CourseMinSerializer):
 class HomeworkTaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = HomeworkTask
-        fields = ['id', 'task_name', 'task_text']
+        fields = ['id', 'task_name', 'task_text', 'attachments', 'link']
 
 
 class HomeWorkSerializer(serializers.ModelSerializer):
-    homework_tasks = HomeworkTaskSerializer(many=True)
+    homework_tasks = serializers.SerializerMethodField()
+    enabled = serializers.ReadOnlyField()
+
+    @staticmethod
+    def get_homework_tasks(obj: HomeWork):
+        return HomeworkTaskSerializer(obj.homework_tasks.all(), many=True).data
 
     class Meta:
         model = HomeWork
-        fields = ['id', 'content', 'attachments', 'link', 'homework_tasks']
+        fields = ['id', 'introduction', 'homework_tasks', 'enabled']
 
 
 class LessonFullSerializer(serializers.ModelSerializer):
     course = CourseMinSerializer()
 
+    homework = HomeWorkSerializer()
+
     class Meta:
         model = Lesson
-        fields = ['id', 'title', 'course', 'available_from', 'content']
+        fields = ['id', 'title', 'course', 'available_from', 'content', 'homework']

@@ -1,0 +1,33 @@
+<div class="w-full">
+    <h1 id="homework_head" class="text-5xl font-extrabold dark:text-white mb-2 mt-10">Homework</h1>
+    <hr class="h-px my-3 bg-gray-200 border-0 dark:bg-gray-700">
+    <ng-container *ngIf="!homework.enabled">
+        <div class="flex flex-col items-center mx-auto my-12">
+            <ng-icon name="heroLockClosed" style="font-size: 64px"
+                     class="text-black dark:text-white"></ng-icon>
+            <h1 class="text-black dark:text-white text-2xl">Homework Disabled</h1>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="homework.enabled">
+        <ng-container *ngIf="homework?.introduction">
+            <h2 class="text-4xl font-bold dark:text-white mb-1 mt-10">Homework Introduction:</h2>
+            <app-markdown-renderer [content]="homework.introduction">
+            </app-markdown-renderer>
+        </ng-container>
+        <h2 class="text-4xl font-bold dark:text-white mt-10 mb-5">Tasks</h2>
+        <ng-container *ngIf="!homework?.homework_tasks?.length">
+            <div class="flex flex-col items-center mx-auto my-12">
+                <ng-icon name="heroQuestionMarkCircle" style="font-size: 64px"
+                         class="text-black dark:text-white"></ng-icon>
+                <h1 class="text-black dark:text-white text-2xl">No tasks</h1>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="homework?.homework_tasks?.length">
+            <div *ngFor="let task of homework?.homework_tasks" class="mb-10">
+                <h3 class="text-3xl font-bold dark:text-white mb-3" [id]="'hw' + task.id">{{task.task_name}}</h3>
+                <app-markdown-renderer [content]="task.task_text">
+                </app-markdown-renderer>
+            </div>
+        </ng-container>
+    </ng-container>
+</div>

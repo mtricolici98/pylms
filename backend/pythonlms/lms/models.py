@@ -24,10 +24,15 @@ class HomeworkTask(models.Model):
     id = models.AutoField(primary_key=True)
     task_name = models.CharField(max_length=30)
     task_text = models.TextField(null=False, default='')
+    attachments = models.FileField(null=True)
+    link = models.URLField(null=True)
 
     def __repr__(self):
-        return (f"[{self.id}] | {self.homework_tasks.count()} tasks |"
+        return (f"[{self.id}] | {self.task_name} |"
                 f" {self.task_text[:20]} {'...' if len(self.task_text) > 20 else ''}")
+
+    def __str__(self):
+        return repr(self)
 
 
 class HomeworkSubmission(models.Model):
@@ -47,19 +52,20 @@ class HomeworkSubmission(models.Model):
 
 class HomeWork(models.Model):
     id = models.AutoField(primary_key=True)
-    content = models.TextField(null=False, default='')
-    attachments = models.FileField(null=True)
-    link = models.URLField(null=True)
+    introduction = models.TextField(null=False, default='')
     homework_tasks = models.ManyToManyField(HomeworkTask)
-    enabled = models.BooleanField(default=False)
+    available_from = models.DateTimeField(default=timezone.now)
 
     def __repr__(self):
         return (f"[{self.id}] | {self.homework_tasks.count()} tasks |"
-                f" {self.content[:20]} {'...' if len(self.content) > 20 else ''} |"
-                f" {'with attachment' if self.attachments else 'no attachment'}")
+                f" {self.introduction[:20]} {'...' if len(self.introduction) > 20 else ''}")
 
     def __str__(self):
         return repr(self)
+
+    @property
+    def enabled(self):
+        return timezone.now() > self.available_from
 
 
 class Lesson(models.Model):
@@ -69,7 +75,7 @@ class Lesson(models.Model):
     course = models.ForeignKey(Course, on_delete=models.PROTECT, null=False)
     available_from = models.DateTimeField(default=timezone.now)
     content = models.TextField()
-    homework = models.ForeignKey(HomeWork, on_delete=models.PROTECT)
+    homework = models.ForeignKey(HomeWork, on_delete=models.PROTECT, null=True)
 
     class Meta:
         unique_together = ['title', 'course']

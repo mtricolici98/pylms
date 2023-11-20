@@ -10,38 +10,25 @@ import {EventBusService} from './_shared/event-bus.service';
     styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-    private roles: string[] = [];
     isLoggedIn = false;
-    showAdminBoard = false;
-    showModeratorBoard = false;
     username?: string;
 
-    eventBusSub?: Subscription;
     navbarExtended: boolean = false;
     darkMode = true;
 
     constructor(
         private storageService: StorageService,
         private authService: AuthService,
-        private eventBusService: EventBusService
     ) {
     }
 
     ngOnInit(): void {
         this.isLoggedIn = this.storageService.isLoggedIn();
-
         if (this.isLoggedIn) {
             const user = this.storageService.getUser();
 
-            this.showAdminBoard = this.roles.includes('ROLE_ADMIN');
-            this.showModeratorBoard = this.roles.includes('ROLE_MODERATOR');
-
             this.username = user?.email;
         }
-
-        this.eventBusSub = this.eventBusService.on('logout', () => {
-            this.logout();
-        });
     }
 
     logout(): void {

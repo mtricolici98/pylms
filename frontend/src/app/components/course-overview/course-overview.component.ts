@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Course, Lesson} from "../../models/course";
 import {CourseService} from "../../_services/course.service";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {Toast, ToastrService} from "ngx-toastr";
 import {Title} from "@angular/platform-browser";
 
@@ -15,7 +15,7 @@ export class CourseOverviewComponent implements OnInit {
     course: Course;
     loading: boolean;
 
-    constructor(private courseService: CourseService, private route: ActivatedRoute, private tostr: ToastrService, private title: Title) {
+    constructor(private courseService: CourseService, private route: ActivatedRoute, private tostr: ToastrService, private title: Title, private router: Router) {
     }
 
     ngOnInit(): void {
@@ -31,7 +31,11 @@ export class CourseOverviewComponent implements OnInit {
     loadCourse(courseId: string | null) {
         this.loading = true;
         if (!courseId) {
-            // TODO: Navigate to 404
+            this.router.navigate(['/']).then(
+                () => {
+                    this.tostr.error(`Course not found`);
+                }
+            );
             return;
         }
         this.courseService.getCourseById(courseId).subscribe(
@@ -42,7 +46,12 @@ export class CourseOverviewComponent implements OnInit {
                     this.title.setTitle(this.course.title);
                 },
                 error: error => {
-                    this.tostr.error(error.error?.message || error.error);
+                    this.router.navigate(['/']).then(
+                        () => {
+                            this.tostr.error(`Course not found`);
+                        }
+                    );
+                    return;
                 },
                 complete: () => {
                     this.loading = false;

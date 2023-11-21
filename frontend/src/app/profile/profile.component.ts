@@ -41,6 +41,8 @@ export class ProfileComponent implements OnInit {
         this.authService.changePassword(password).subscribe({
             next: data => {
                 this.toastr.success("Pass change success!");
+                this.form.password = '';
+                this.form.password_conf = '';
             },
             error: err => {
                 let err_msg: string[] = [];

@@ -74,6 +74,7 @@ class Lesson(models.Model):
     title = models.CharField(max_length=255)
     course = models.ForeignKey(Course, on_delete=models.PROTECT, null=False)
     available_from = models.DateTimeField(default=timezone.now)
+    summary = models.TextField(null=False, default='')
     content = models.TextField()
     homework = models.ForeignKey(HomeWork, on_delete=models.PROTECT, null=True)
 

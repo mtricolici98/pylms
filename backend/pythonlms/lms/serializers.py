@@ -15,9 +15,15 @@ class CourseMinSerializer(serializers.ModelSerializer):
 
 
 class LessonMinSerializer(serializers.ModelSerializer):
+    homework_enabled = serializers.SerializerMethodField()
+
     class Meta:
         model = Lesson
-        fields = ['id', 'title', 'course', 'available_from']
+        fields = ['id', 'title', 'course', 'available_from', 'homework_enabled', 'summary']
+
+    @staticmethod
+    def get_homework_enabled(obj: Lesson):
+        return obj.homework and obj.homework.enabled
 
 
 class CourseSerializer(CourseMinSerializer):

@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Lesson} from "../../models/course";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ToastrService} from "ngx-toastr";
@@ -16,13 +16,15 @@ class Heading {
     templateUrl: './lesson-view.component.html',
     styleUrls: ['./lesson-view.component.css']
 })
-export class LessonViewComponent {
+export class LessonViewComponent implements OnInit {
 
     lesson: Lesson;
     loading: boolean;
 
     headings: Heading[];
     navbarExtended = false;
+
+    private headingOnLoad = '';
 
     constructor(private lessonService: LessonService, private route: ActivatedRoute,
                 private tostr: ToastrService, private title: Title, private router: Router) {
@@ -36,6 +38,11 @@ export class LessonViewComponent {
                 }
             }
         );
+        this.route.fragment.subscribe((el) => {
+            if (el) {
+                this.headingOnLoad = el;
+            }
+        });
     }
 
     loadLesson(courseId: string | null) {
@@ -84,6 +91,9 @@ export class LessonViewComponent {
                 });
             }
         );
+        if (this.headingOnLoad) {
+            this.navigateToAnchor(this.headingOnLoad);
+        }
     }
 
     navigateToAnchor(id: string) {

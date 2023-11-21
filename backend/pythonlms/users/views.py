@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import BadRequest
 from rest_framework import status
 from rest_framework.decorators import api_view, authentication_classes
 from rest_framework.generics import CreateAPIView, RetrieveAPIView
@@ -78,6 +79,9 @@ class UserProfileView(RetrieveAPIView):
 @authentication_classes([JSONWebTokenAuthentication])
 def change_password(request):
     user = request.user
-    new_password = request.data('new_password')
+    new_password = request.data.get('new_password')
+    if not new_password:
+        raise BadRequest(dict(message='Empty new password'))
     user.set_password(new_password)
     user.save()
+    return Response(status=200)

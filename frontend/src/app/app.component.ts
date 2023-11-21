@@ -20,6 +20,8 @@ export class AppComponent implements OnInit {
         private storageService: StorageService,
         private authService: AuthService,
     ) {
+        const theme = window.localStorage.getItem("THEME");
+        this.darkMode = theme != 'light';
     }
 
     ngOnInit(): void {
@@ -33,5 +35,10 @@ export class AppComponent implements OnInit {
 
     logout(): void {
         this.authService.logout();
+    }
+
+    toggleDarkMode() {
+        this.darkMode = !this.darkMode;
+        window.localStorage.setItem("THEME", this.darkMode ? "dark" : "light");
     }
 }

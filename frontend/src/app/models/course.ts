@@ -19,8 +19,10 @@ export class Lesson {
     title: string;
     course: Course;
     available_from: Date;
+    summary: string;
     content: string;
     homework: Homework;
+    homework_enabled?: boolean;
 }
 
 export class Course {
@@ -31,3 +33,4 @@ export class Course {
 
     lessons?: Lesson[];
 }
+``

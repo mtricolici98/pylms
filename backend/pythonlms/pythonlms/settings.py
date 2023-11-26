@@ -101,7 +101,7 @@ DATABASES = {
         "USER": os.environ.get("WEB_PG_USER", "lmsuser"),
         "PASSWORD": os.environ.get("WEB_PG_PASSWORD", "lmspass"),
         "HOST": os.environ.get("WEB_PG_HOST", "localhost"),  # set in docker-compose.yml
-        "PORT": os.environ.get("WEB_PG_PORT", 5432),  # default postgres port
+        "PORT": os.environ.get("WEB_PG_PORT", 5433),  # default postgres port
     }
 }
 
@@ -128,7 +128,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Europe/Chisinau"
 
 USE_I18N = True
 

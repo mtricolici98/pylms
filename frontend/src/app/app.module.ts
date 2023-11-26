@@ -33,6 +33,7 @@ import {MarkdownModule} from "ngx-markdown";
 import {MarkdownRendererComponent} from './components/markdown-renderer/markdown-renderer.component';
 import {gfmHeadingId} from "marked-gfm-heading-id";
 import {HomeworkDisplayComponent} from "./components/homework-display/homework-display.component";
+import {CheatsheetComponent} from "./components/cheatsheet/cheatsheet.component";
 
 @NgModule({
     declarations: [
@@ -47,7 +48,8 @@ import {HomeworkDisplayComponent} from "./components/homework-display/homework-d
         CourseItemHeader,
         LessonViewComponent,
         MarkdownRendererComponent,
-        HomeworkDisplayComponent
+        HomeworkDisplayComponent,
+        CheatsheetComponent
     ],
     imports: [
         BrowserModule,

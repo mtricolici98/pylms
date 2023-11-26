@@ -61,10 +61,11 @@ export class HomeworkDisplayComponent implements OnInit {
         }
         this.lessonServices.submitHomework(formData).subscribe(
             {
-                next: () => {
+                next: (submission) => {
                     task.submission_edit = false;
                     task.submission.new = false;
                     this.toastr.success("Submission Successful");
+                    task.submission = {...task.submission, ...submission};
                 },
                 error: () => {
                     this.toastr.error("Failed to upload homework");

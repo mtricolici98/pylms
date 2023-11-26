@@ -1,3 +1,5 @@
+import os
+
 import django_filters
 from django.utils import timezone
 from rest_framework import generics
@@ -7,7 +9,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
-from lms.models import Course, Lesson, HomeworkSubmission, LessonVisit
+from lms.models import Course, Lesson, HomeworkSubmission, LessonVisit, CheatSheetElement
 from lms.serializers import CourseSerializer, CourseMinSerializer, LessonMinSerializer, LessonFullSerializer
 
 
@@ -60,7 +62,10 @@ def get_submitted_homeworks(request, lesson_id):
             {
                 'task_id': hs.homework_id,
                 'code': hs.code,
-                'attachment': dict(name=hs.attachment.name, url=hs.attachment.url) if hs.attachment else None,
+                'attachment': dict(
+                    name=os.path.split(hs.attachment.name)[-1],
+                    url=hs.attachment.url
+                ) if hs.attachment else None,
                 'approved': hs.approved,
                 'comment': hs.comment,
             }
@@ -94,7 +99,7 @@ def submit_homework(request):
         )
     code = request.data.get('code', '')
     files = request.FILES.get('file')
-    HomeworkSubmission.objects.update_or_create(
+    el, _ = HomeworkSubmission.objects.update_or_create(
         homework_id=task_id,
         user=request.user,
         defaults=dict(
@@ -103,7 +108,18 @@ def submit_homework(request):
             approved=None,
         )
     )
-    return Response(status=200)
+    return Response(status=200, data=dict(
+        {
+            'task_id': el.homework_id,
+            'code': el.code,
+            'attachment': dict(
+                name=os.path.split(el.attachment.name)[-1],
+                url=el.attachment.url
+            ) if el.attachment else None,
+            'approved': el.approved,
+            'comment': el.comment,
+        }
+    ))
 
 
 @api_view(['POST'])
@@ -128,3 +144,12 @@ def user_last_lesson(request):
         user=user
     ).order_by('-date').first()
     return Response(status=200, data=dict(lesson_id=last_visit.lesson_id if last_visit else None))
+
+
+@api_view(['GET'])
+@authentication_classes([JSONWebTokenAuthentication])
+def cheatsheet_elements(request):
+    data = list(CheatSheetElement.objects.all().order_by('order').values(
+        'code', 'title'
+    ))
+    return Response(status=200, data=data)

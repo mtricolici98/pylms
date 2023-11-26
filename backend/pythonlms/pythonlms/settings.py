@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import logging
 import logging.config
+import os
 
 from pathlib import Path
 from datetime import timedelta
@@ -96,11 +97,11 @@ WSGI_APPLICATION = "pythonlms.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "lmsdb",
-        "USER": "lmsuser",
-        "PASSWORD": "lmspass",
-        "HOST": "localhost",  # set in docker-compose.yml
-        "PORT": 5432,  # default postgres port
+        "NAME": os.environ.get("WEB_PG_NAME", "lmsdb"),
+        "USER": os.environ.get("WEB_PG_USER", "lmsuser"),
+        "PASSWORD": os.environ.get("WEB_PG_PASSWORD", "lmspass"),
+        "HOST": os.environ.get("WEB_PG_HOST", "localhost"),  # set in docker-compose.yml
+        "PORT": os.environ.get("WEB_PG_PORT", 5432),  # default postgres port
     }
 }
 
@@ -139,6 +140,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = "/static/"
+
+STATIC_ROOT = BASE_DIR / 'static'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

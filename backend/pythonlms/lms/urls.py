@@ -1,8 +1,9 @@
 from django.urls import path
 from lms.views import CoursesListView, CourseGetView, LessonListView, LessonGet, register_lesson_visit, \
-    user_last_lesson, get_submitted_homeworks, submit_homework, get_user_submitted_homeworks
+    user_last_lesson, get_submitted_homeworks, submit_homework, get_user_submitted_homeworks, cheatsheet_elements
 
 urlpatterns = [
+    path("cheatsheet/list/", cheatsheet_elements),
     path("course/list/", CoursesListView.as_view()),
     path("course/get/<id>/", CourseGetView.as_view()),
     path("lesson/list/", LessonListView.as_view()),

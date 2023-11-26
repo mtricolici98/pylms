@@ -17,6 +17,7 @@ pillow = "^10.1.0"
 django-filter = "^23.3"
 django-unfold = "^0.16.0"
 django-import-export = "^3.3.3"
+gunicorn = "^21.2.0"
 
 [tool.poetry.dev-dependencies]
 

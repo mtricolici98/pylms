@@ -110,3 +110,16 @@ class LessonVisit(models.Model):
 
     def __str__(self):
         return repr(self)
+
+
+class CheatSheetElement(models.Model):
+    id = models.AutoField(primary_key=True)
+    order = models.IntegerField(default=0)
+    code = models.TextField()
+    title = models.CharField(max_length=255)
+
+    def __repr__(self):
+        return (f"CheatSheet El: {self.title}")
+
+    def __str__(self):
+        return repr(self)

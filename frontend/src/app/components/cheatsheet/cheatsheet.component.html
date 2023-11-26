@@ -1,0 +1,7 @@
+<div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 md:gap-4 m-2 gap-2">
+    <div *ngFor="let cs of cheatSheetElements">
+        <h3 class="text-3xl font-bold dark:text-white mb-3">{{cs.title}}</h3>
+        <app-markdown-renderer [content]="cs.code">
+        </app-markdown-renderer>
+    </div>
+</div>

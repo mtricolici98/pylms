@@ -2,8 +2,9 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Lesson} from "../models/course";
+import {GLOBAL_API_URL} from "./url";
 
-const API_URL = 'http://localhost:8000/api/lms/lesson/';
+const API_URL = `http://${GLOBAL_API_URL}/api/lms/lesson/`;
 
 @Injectable({
     providedIn: 'root',

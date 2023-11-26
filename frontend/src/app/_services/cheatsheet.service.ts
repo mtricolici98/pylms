@@ -1,8 +1,9 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
+import {GLOBAL_API_URL} from "./url";
 
-const API_URL = 'http://localhost:8000/api/lms/cheatsheet/';
+const API_URL = `http://${GLOBAL_API_URL}/api/lms/cheatsheet/`;
 
 @Injectable({
     providedIn: 'root',

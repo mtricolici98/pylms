@@ -11,8 +11,8 @@ from users.models import User
 class Course(models.Model):
     id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=25, null=False)
-    description = models.TextField(null=False, default='')
-    image = models.ImageField()
+    description = models.TextField(null=False, default='', blank=True)
+    image = models.ImageField(blank=True)
 
     def __repr__(self):
         return (f"[{self.id}] | {self.title} | {self.description[:20]} {'...' if len(self.description) > 20 else ''} "
@@ -25,9 +25,9 @@ class Course(models.Model):
 class HomeworkTask(models.Model):
     id = models.AutoField(primary_key=True)
     task_name = models.CharField(max_length=30)
-    task_text = models.TextField(null=False, default='')
-    attachments = models.FileField(null=True)
-    link = models.URLField(null=True)
+    task_text = models.TextField(null=False, default='', blank=True)
+    attachments = models.FileField(null=True, blank=True)
+    link = models.URLField(null=True, blank=True)
 
     def __repr__(self):
         return (f"[{self.id}] | {self.task_name} |"
@@ -42,7 +42,7 @@ class HomeworkSubmission(models.Model):
     user = models.ForeignKey(User, null=False, on_delete=models.PROTECT)
     homework = models.ForeignKey(HomeworkTask, null=False, on_delete=models.PROTECT)
     code = models.TextField()
-    attachment = models.FileField(upload_to='homework_sub')
+    attachment = models.FileField(upload_to='homework_sub', blank=True)
     approved = models.BooleanField(null=True, default=None)
     comment = models.TextField(null=False, default='')
 
@@ -59,7 +59,7 @@ class HomeworkSubmission(models.Model):
 
 class HomeWork(models.Model):
     id = models.AutoField(primary_key=True)
-    introduction = models.TextField(null=False, default='')
+    introduction = models.TextField(null=False, default='', blank=True)
     homework_tasks = models.ManyToManyField(HomeworkTask)
     available_from = models.DateTimeField(default=timezone.now)
 
@@ -81,9 +81,9 @@ class Lesson(models.Model):
     title = models.CharField(max_length=255)
     course = models.ForeignKey(Course, on_delete=models.PROTECT, null=False)
     available_from = models.DateTimeField(default=timezone.now)
-    summary = models.TextField(null=False, default='')
+    summary = models.TextField(null=False, default='', blank=True)
     content = models.TextField()
-    homework = models.ForeignKey(HomeWork, on_delete=models.PROTECT, null=True)
+    homework = models.ForeignKey(HomeWork, on_delete=models.PROTECT, null=True, blank=True)
 
     class Meta:
         unique_together = ['title', 'course']

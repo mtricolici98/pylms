@@ -23,6 +23,8 @@ services:
       target: nginx-build
     volumes:
       - ./nginx/:/etc/nginx/conf.d:ro
+      - static:/var/www/static:ro
+      - media_data:/var/www/media:ro
     ports:
       - "${ANGULAR_DJANGO_HTTP_PORT:-80:80}"
 
@@ -46,6 +48,7 @@ services:
       dockerfile: ./Dockerfile
     volumes:
       - media_data:/app/uploads
+      - static:/app/static
     env_file:
       - .env
 
@@ -67,6 +70,7 @@ volumes:
       type: none
       device: /data/media_data
       o: bind
+  static:
 
 
 networks:

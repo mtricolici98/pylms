@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from lms.models import Course, Lesson, HomeWork, HomeworkTask
+from lms.models import Course, Lesson, HomeWork, HomeworkTask, HomeworkSubmission
 
 
 class CourseMinSerializer(serializers.ModelSerializer):
@@ -65,3 +65,9 @@ class LessonFullSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lesson
         fields = ['id', 'title', 'course', 'available_from', 'content', 'homework']
+
+
+class HomeworkSubmissionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HomeworkSubmission
+        fields = ['id', 'user', 'homework', 'code', 'attachment']

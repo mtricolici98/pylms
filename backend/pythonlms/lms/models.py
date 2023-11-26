@@ -2,6 +2,8 @@ from datetime import datetime
 
 from django.db import models
 from django.utils import timezone
+from rest_framework import views
+from rest_framework.parsers import FileUploadParser
 
 from users.models import User
 
@@ -40,10 +42,15 @@ class HomeworkSubmission(models.Model):
     user = models.ForeignKey(User, null=False, on_delete=models.PROTECT)
     homework = models.ForeignKey(HomeworkTask, null=False, on_delete=models.PROTECT)
     code = models.TextField()
-    attachment = models.FileField()
+    attachment = models.FileField(upload_to='homework_sub')
+    approved = models.BooleanField(null=True, default=None)
+    comment = models.TextField(null=False, default='')
 
     def __repr__(self):
-        return (f"Submission | {self.user.get_username()} | task {self.homework.task_name} |"
+        approval = 'Not Visited'
+        if self.approved is not None:
+            approval = 'Approved' if self.approved else 'Not Approved'
+        return (f"{approval} Submission | {self.user.get_username()} | task {self.homework.task_name} |"
                 f" {'with attachement' if self.attachment else 'no attachement'}")
 
     def __str__(self):
@@ -84,6 +91,22 @@ class Lesson(models.Model):
     def __repr__(self):
         return (f"[{self.id}] | {self.title} | {self.content[:20]} {'...' if len(self.content) > 20 else ''} "
                 f"| {'with homework' if self.homework else 'no homework'}")
+
+    def __str__(self):
+        return repr(self)
+
+
+class LessonVisit(models.Model):
+    id = models.AutoField(primary_key=True)
+    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    date = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        unique_together = ['lesson', 'user']
+
+    def __repr__(self):
+        return (f"Visit from {self.user.email} on {self.lesson_id} at {self.date}")
 
     def __str__(self):
         return repr(self)

@@ -30,7 +30,6 @@ export class HttpRequestInterceptor implements HttpInterceptor {
                 withCredentials: true,
                 setHeaders: {
                     'Authorization': `Bearer ${this.storageService.getToken()}`,
-                    'Content-Type': 'application/json'
                 }
             });
         }

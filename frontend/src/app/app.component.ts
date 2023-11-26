@@ -3,6 +3,9 @@ import {Subscription} from 'rxjs';
 import {StorageService} from './_services/storage.service';
 import {AuthService} from './_services/auth.service';
 import {EventBusService} from './_shared/event-bus.service';
+import {LessonService} from "./_services/lesson.service";
+import {Router} from "@angular/router";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
     selector: 'app-root',
@@ -19,6 +22,9 @@ export class AppComponent implements OnInit {
     constructor(
         private storageService: StorageService,
         private authService: AuthService,
+        private lessonService: LessonService,
+        private router: Router,
+        private toastr: ToastrService,
     ) {
         const theme = window.localStorage.getItem("THEME");
         this.darkMode = theme != 'light';
@@ -40,5 +46,19 @@ export class AppComponent implements OnInit {
     toggleDarkMode() {
         this.darkMode = !this.darkMode;
         window.localStorage.setItem("THEME", this.darkMode ? "dark" : "light");
+    }
+
+    getLastUserLesson() {
+        this.lessonService.getLastForUser().subscribe({
+                next: (res) => {
+                    if (res?.lesson_id) {
+                        this.router.navigate(['/lesson', res.lesson_id]);
+                    }
+                },
+                error: () => {
+                    this.toastr.error("Could not find last course...");
+                }
+            }
+        );
     }
 }

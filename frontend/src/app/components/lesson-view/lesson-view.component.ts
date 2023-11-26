@@ -61,6 +61,7 @@ export class LessonViewComponent implements OnInit {
                     this.lesson = el;
                     this.loading = false;
                     this.title.setTitle(this.lesson.title);
+                    this.lessonService.registerVisit(this.lesson.id.toString()).subscribe();
                 },
                 error: error => {
                     this.router.navigate(['/']).then(

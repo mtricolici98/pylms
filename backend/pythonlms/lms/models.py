@@ -44,7 +44,7 @@ class HomeworkSubmission(models.Model):
     code = models.TextField()
     attachment = models.FileField(upload_to='homework_sub', blank=True)
     approved = models.BooleanField(null=True, default=None)
-    comment = models.TextField(null=False, default='')
+    comment = models.TextField(null=False, default='', blank=True)
 
     def __repr__(self):
         approval = 'Not Visited'

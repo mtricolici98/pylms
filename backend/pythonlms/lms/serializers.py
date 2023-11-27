@@ -35,7 +35,7 @@ class CourseSerializer(CourseMinSerializer):
 
     @staticmethod
     def get_lessons(obj: Course):
-        return LessonMinSerializer(obj.lesson_set.all(), many=True).data
+        return LessonMinSerializer(obj.lesson_set.all().order_by('order'), many=True).data
 
 
 class HomeworkTaskSerializer(serializers.ModelSerializer):

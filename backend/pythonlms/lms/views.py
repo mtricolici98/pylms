@@ -3,9 +3,9 @@ import os
 import django_filters
 from django.utils import timezone
 from rest_framework import generics
-from rest_framework.decorators import api_view, authentication_classes, parser_classes
+from rest_framework.decorators import api_view, authentication_classes, parser_classes, permission_classes
 from rest_framework.parsers import FormParser, MultiPartParser, JSONParser
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from rest_framework.response import Response
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
@@ -86,6 +86,44 @@ def get_user_submitted_homeworks(request):
             }
         )
     return Response(status=200, data=data)
+
+
+@api_view(['GET'])
+@authentication_classes([JSONWebTokenAuthentication])
+@permission_classes([IsAdminUser])
+def get_task_submissions(request, task_id):
+    data = []
+    for hs in HomeworkSubmission.objects.filter(
+            homework_id=task_id
+    ):
+        data.append(
+            {
+                'id': hs.id,
+                'code': hs.code,
+                'comment': hs.comment,
+                'user': dict(name=hs.user.username, email=hs.user.email),
+                'approved': hs.approved,
+                'attachment': dict(
+                    name=os.path.split(hs.attachment.name)[-1],
+                    url=hs.attachment.url
+                ) if hs.attachment else None,
+            }
+        )
+    return Response(status=200, data=data)
+
+
+@api_view(['POST'])
+@parser_classes([FormParser, MultiPartParser, JSONParser])
+@authentication_classes([JSONWebTokenAuthentication])
+@permission_classes([IsAdminUser])
+def modify_submission(request, submission_id):
+    approved = request.data.get('approval', None)
+    comment = request.data.get('comment', "")
+    records = HomeworkSubmission.objects.filter(id=submission_id).update(
+        approved=approved,
+        comment=comment
+    )
+    return Response(status=200 if records else 404)
 
 
 @api_view(['POST'])

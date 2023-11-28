@@ -5,6 +5,9 @@ import {Homework, HomeworkSubmission, HomeworkTask, Lesson} from "../../models/c
 import {AppModule} from "../../app.module";
 import {LessonService} from "../../_services/lesson.service";
 import {ToastrService} from "ngx-toastr";
+import {AuthService} from "../../_services/auth.service";
+import {StorageService} from "../../_services/storage.service";
+import {window} from "rxjs";
 
 @Component({
     selector: 'app-homework-display',
@@ -20,8 +23,11 @@ export class HomeworkDisplayComponent implements OnInit {
     @Input()
     lesson_id: number;
 
-    constructor(private lessonServices: LessonService, private toastr: ToastrService) {
+    is_user_admin = false;
+    is_review_mode = false;
 
+    constructor(private lessonServices: LessonService, private toastr: ToastrService, private stroage: StorageService) {
+        this.is_user_admin = this.stroage.isAdmin();
     }
 
 
@@ -83,4 +89,43 @@ export class HomeworkDisplayComponent implements OnInit {
             }
         }
     }
+
+    loadSubmissions(task: HomeworkTask) {
+        this.lessonServices.getAllTaskSubmissions(task.id).subscribe(
+            {
+                next: (data) => {
+                    task.submissions = data;
+                    task.submissions_loaded = true;
+                },
+                error: () => {
+                    this.toastr.error("Could not load submissions");
+                }
+            }
+        );
+    }
+
+    saveSubmission(submission: HomeworkSubmission) {
+        this.lessonServices.changeSubmission(
+            submission.id, submission.approved, submission.comment
+        ).subscribe(
+            {
+                next: (data) => {
+                    this.toastr.success("Review submitted successfully");
+                },
+                error: () => {
+                    this.toastr.error("Could not review");
+                }
+            }
+        );
+    }
+
+    getCode(code: string) {
+        return `\n` +
+            `\`\`\`python\n` +
+            `${code} \n` +
+            `\`\`\``;
+    }
+
+    protected readonly window = window;
+    protected readonly location = location;
 }

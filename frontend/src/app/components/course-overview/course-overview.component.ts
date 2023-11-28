@@ -48,10 +48,13 @@ export class CourseOverviewComponent implements OnInit {
                 error: error => {
                     this.router.navigate(['/']).then(
                         () => {
-                            this.tostr.error(`Course not found`);
+                            if (error?.status == 401) {
+                                this.tostr.error(`You are not allowed to access the course`);
+                            } else {
+                                this.tostr.error(`Course not found or something...`);
+                            }
                         }
                     );
-                    return;
                 },
                 complete: () => {
                     this.loading = false;

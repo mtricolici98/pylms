@@ -1,3 +1,5 @@
+import {User} from "./user";
+
 export class HomeworkTask {
     id: number;
     task_name: string;
@@ -6,6 +8,8 @@ export class HomeworkTask {
     link?: string;
     submission: HomeworkSubmission;
     submission_edit: boolean = false;
+    submissions?: HomeworkSubmission[];
+    submissions_loaded = false;
 }
 
 export class Homework {
@@ -33,10 +37,11 @@ export class HomeworkSubmission {
     id: number;
     task_id: number;
     code: string;
-    attachment?: File;
+    attachment?: File | { url: string; name: string } | any;
     new: boolean;
     approved: boolean | null;
     comment: string;
+    user: User;
 }
 
 export class Course {

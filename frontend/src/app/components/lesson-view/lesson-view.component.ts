@@ -4,6 +4,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {ToastrService} from "ngx-toastr";
 import {LessonService} from "../../_services/lesson.service";
 import {Title} from "@angular/platform-browser";
+import {HttpErrorResponse} from "@angular/common/http";
 
 class Heading {
     id: string;
@@ -63,10 +64,14 @@ export class LessonViewComponent implements OnInit {
                     this.title.setTitle(this.lesson.title);
                     this.lessonService.registerVisit(this.lesson.id.toString()).subscribe();
                 },
-                error: error => {
+                error: (error: HttpErrorResponse) => {
                     this.router.navigate(['/']).then(
                         () => {
-                            this.tostr.error(`Course not found`);
+                            if (error.status == 401) {
+                                this.tostr.error(`You are not allowed to access the lesson`);
+                            } else {
+                                this.tostr.error(`Lesson not found or something...`);
+                            }
                         }
                     );
                     return;

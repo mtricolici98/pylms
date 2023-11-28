@@ -30,8 +30,18 @@ export class LessonService {
         return this.http.get(API_URL + `homework/get/${lesson_id}/`);
     }
 
-    getAllHomeworkSubmission(): Observable<any> {
-        return this.http.get(API_URL + `homework/submissions/`);
+    getAllTaskSubmissions(task_id: number): Observable<any> {
+        return this.http.get(API_URL + `homework/submissions/task/${task_id}/`);
+    }
+
+    changeSubmission(submission_id: number, approval: boolean | null, comment: string): Observable<any> {
+        return this.http.post(API_URL + `homework/submissions/modify/${submission_id}/`,
+            {approval, comment}
+        );
+    }
+
+    getAllUserSubmissions(): Observable<any> {
+        return this.http.get(API_URL + `homework/submissions/user/`);
     }
 
     submitHomework(data: FormData): Observable<any> {

@@ -41,6 +41,7 @@ export class AppComponent implements OnInit {
                         next: (data) => {
                             this.username = data.data[0].name;
                             user.name = data.data[0].name;
+                            user.is_admin = data.data[0]?.is_admin || false;
                             this.storageService.saveUser(user);
                         }
                     }

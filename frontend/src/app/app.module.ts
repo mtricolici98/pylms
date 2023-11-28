@@ -49,7 +49,7 @@ import {CheatsheetComponent} from "./components/cheatsheet/cheatsheet.component"
         LessonViewComponent,
         MarkdownRendererComponent,
         HomeworkDisplayComponent,
-        CheatsheetComponent
+        CheatsheetComponent,
     ],
     imports: [
         BrowserModule,

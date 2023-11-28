@@ -1,5 +1,9 @@
 <div class="w-full">
     <h1 id="homework_head" class="text-5xl font-extrabold dark:text-white mb-2 mt-10">Homework</h1>
+    <button *ngIf="is_user_admin" (click)="is_review_mode = !is_review_mode"
+            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+        Toggle Review Mode
+    </button>
     <hr class="h-px my-3 bg-gray-200 border-0 dark:bg-gray-700">
     <ng-container *ngIf="!homework.enabled">
         <div class="flex flex-col items-center mx-auto my-12">
@@ -27,87 +31,157 @@
                 <h3 class="text-3xl font-bold dark:text-white mb-3" [id]="'hw' + task.id">{{task.task_name}}</h3>
                 <app-markdown-renderer [content]="task.task_text">
                 </app-markdown-renderer>
-                <h3 class="text-2xl font-bold dark:text-white mb-3" [id]="'hw' + task.id">Your solution</h3>
-                <ng-container *ngIf="task.submission?.new || task.submission_edit">
-                    <form (ngSubmit)="onSubmit(task)">
-                        <input type="file" class="file-upload" (change)="onFileSelected(task, $event)"
-                               #fileInput
-                               style="display: none">
-                        <div class="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
-                            <div class="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-800">
-                                <label for="comment" class="sr-only">Your Solution</label>
-                                <textarea id="comment" rows="4"
-                                          name="code"
-                                          [(ngModel)]="task.submission.code"
-                                          class="w-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400"
-                                          placeholder="Write your code here..." required></textarea>
-                            </div>
-                            <div class="flex items-center justify-between px-3 py-2 border-t dark:border-gray-600">
-                                <button type="submit"
-                                        class="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800">
-                                    Submit Solution
-                                </button>
-                                <div class="flex ps-0 space-x-1 rtl:space-x-reverse sm:ps-2">
-                                    <button type="button"
-                                            (click)="fileInput.click()"
-                                            class="inline-flex justify-center items-center p-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600">
-                                        <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                             fill="none" viewBox="0 0 12 20">
-                                            <path stroke="currentColor" stroke-linejoin="round" stroke-width="2"
-                                                  d="M1 6v8a5 5 0 1 0 10 0V4.5a3.5 3.5 0 1 0-7 0V13a2 2 0 0 0 4 0V6"/>
-                                        </svg>
-                                        <span *ngIf="task?.submission?.attachment">{{task?.submission?.attachment?.name}}</span>
-                                        <span class="sr-only">Attach file</span>
+                <h3 class="text-2xl font-bold dark:text-white mb-3" [id]="'hw' + task.id">Solution</h3>
+                <ng-container *ngIf="!is_review_mode">
+                    <ng-container *ngIf="task.submission?.new || task.submission_edit">
+                        <form (ngSubmit)="onSubmit(task)">
+                            <input type="file" class="file-upload" (change)="onFileSelected(task, $event)"
+                                   #fileInput
+                                   style="display: none">
+                            <div class="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+                                <div class="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-800">
+                                    <label for="comment" class="sr-only">Your Solution</label>
+                                    <textarea id="comment" rows="4"
+                                              name="code"
+                                              [(ngModel)]="task.submission.code"
+                                              class="w-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400"
+                                              placeholder="Write your code here..." required></textarea>
+                                </div>
+                                <div class="flex items-center justify-between px-3 py-2 border-t dark:border-gray-600">
+                                    <button type="submit"
+                                            class="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800">
+                                        Submit Solution
                                     </button>
+                                    <div class="flex ps-0 space-x-1 rtl:space-x-reverse sm:ps-2">
+                                        <button type="button"
+                                                (click)="fileInput.click()"
+                                                class="inline-flex justify-center items-center p-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600">
+                                            <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                 fill="none" viewBox="0 0 12 20">
+                                                <path stroke="currentColor" stroke-linejoin="round" stroke-width="2"
+                                                      d="M1 6v8a5 5 0 1 0 10 0V4.5a3.5 3.5 0 1 0-7 0V13a2 2 0 0 0 4 0V6"/>
+                                            </svg>
+                                            <span *ngIf="task?.submission?.attachment">{{task?.submission?.attachment?.name}}</span>
+                                            <span class="sr-only">Attach file</span>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
+                            <p class="ms-auto text-xs text-gray-500 dark:text-gray-400">
+                                You homework may be reviewed by your
+                                teacher.</p>
+                        </form>
+                    </ng-container>
+                    <ng-container *ngIf="task?.submission && task.submission?.new != true && !task.submission_edit">
+                        <div class="flex items-center p-4 mb-4 text-sm text-blue-800 border border-blue-300 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400 dark:border-blue-800"
+                             role="alert" *ngIf="task.submission.approved == null">
+                            <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true"
+                                 xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                            </svg>
+                            <span class="sr-only">Info</span>
+                            <div>
+                                <span class="font-medium">Your solution has been submitted!</span> Approval Pending...
+                                <a (click)="task.submission_edit = true"
+                                   class="text-blue-600 dark:text-blue-500 hover:underline cursor-pointer">Change
+                                    solution</a>
+                            </div>
                         </div>
-                        <p class="ms-auto text-xs text-gray-500 dark:text-gray-400">
-                            You homework may be reviewed by your
-                            teacher.</p>
-                    </form>
+                        <div class="flex items-center p-4 mb-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800"
+                             role="alert" *ngIf="task.submission?.approved == false">
+                            <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true"
+                                 xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                            </svg>
+                            <span class="sr-only">Info</span>
+                            <div>
+                                <span class="font-medium">Has issues!</span> Code you have submitted has issues.
+                                <a (click)="task.submission_edit = true"
+                                   class="text-blue-600 dark:text-blue-500 hover:underline  cursor-pointer">Change
+                                    solution</a>
+                                <p>{{task.submission?.comment}}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center p-4 mb-4 text-sm text-green-800 border border-green-300 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 dark:border-green-800"
+                             role="alert" *ngIf="task.submission?.approved == true">
+                            <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true"
+                                 xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                            </svg>
+                            <span class="sr-only">Info</span>
+                            <div>
+                                <span class="font-medium">Good Job!</span> Tutor has reviewed your solution and approved
+                                it.
+                                <a (click)="task.submission_edit = true"
+                                   class="text-blue-600 dark:text-blue-500 hover:underline  cursor-pointer">Change
+                                    solution</a>
+                            </div>
+                        </div>
+                    </ng-container>
                 </ng-container>
-                <ng-container *ngIf="!task.submission?.new && !task.submission_edit">
-                    <div class="flex items-center p-4 mb-4 text-sm text-blue-800 border border-blue-300 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400 dark:border-blue-800"
-                         role="alert" *ngIf="task.submission.approved == null">
-                        <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true"
-                             xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
-                        </svg>
-                        <span class="sr-only">Info</span>
-                        <div>
-                            <span class="font-medium">Your solution has been submitted!</span> Approval Pending...
-                            <a (click)="task.submission_edit = true"
-                               class="text-blue-600 dark:text-blue-500 hover:underline cursor-pointer">Change solution</a>
-                        </div>
-                    </div>
-                    <div class="flex items-center p-4 mb-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800"
-                         role="alert" *ngIf="task.submission?.approved == false">
-                        <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true"
-                             xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
-                        </svg>
-                        <span class="sr-only">Info</span>
-                        <div>
-                            <span class="font-medium">Has issues!</span> Code you have submitted has issues.
-                            <a (click)="task.submission_edit = true"
-                               class="text-blue-600 dark:text-blue-500 hover:underline  cursor-pointer">Change solution</a>
-                            <p>{{task.submission?.comment}}</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center p-4 mb-4 text-sm text-green-800 border border-green-300 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 dark:border-green-800"
-                         role="alert" *ngIf="task.submission?.approved == true">
-                        <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true"
-                             xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
-                        </svg>
-                        <span class="sr-only">Info</span>
-                        <div>
-                            <span class="font-medium">Good Job!</span> Tutor has reviewed your solution and approved it.
-                            <a (click)="task.submission_edit = true"
-                               class="text-blue-600 dark:text-blue-500 hover:underline  cursor-pointer">Change solution</a>
-                        </div>
-                    </div>
+                <ng-container *ngIf="is_review_mode">
+                    <ng-container *ngIf="!task?.submissions?.length">
+                        <button *ngIf="is_user_admin" (click)="loadSubmissions(task)"
+                                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                            Load Submissions
+                        </button>
+                        <span *ngIf="task.submissions_loaded"
+                              class="flex items-center text-sm font-medium text-gray-900 dark:text-white me-3">
+                            <span class="flex w-2.5 h-2.5 bg-blue-600 rounded-full me-1.5 flex-shrink-0"></span>Submissions Loaded</span>
+                    </ng-container>
+                    <button *ngIf="is_user_admin && task.submissions_loaded && task?.submissions?.length"
+                            (click)="loadSubmissions(task)"
+                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                        ReLoad Submissions
+                    </button>
+                    <ng-container *ngFor="let sub of task?.submissions">
+                        <h3 class="text-2xl font-bold dark:text-white mb-3">From {{sub.user.name}}</h3>
+                        <app-markdown-renderer [content]="getCode(sub.code)">
+                        </app-markdown-renderer>
+                        <form (ngSubmit)="saveSubmission(sub)">
+                            <div class="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+                                <div class="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-800">
+                                    <label for="comment" class="sr-only">Comment</label>
+                                    <textarea id="comment" rows="4"
+                                              name="code"
+                                              [(ngModel)]="sub.comment"
+                                              class="w-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400"
+                                              placeholder="Your Comment Here"></textarea>
+                                </div>
+                                <div class="flex items-center justify-between px-3 py-2 border-t dark:border-gray-600">
+                                    <button type="submit"
+                                            class="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800">
+                                        Submit
+                                    </button>
+                                    <button type="button"
+                                            (click)="sub.approved=true"
+                                            class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                                        Approve {{sub.approved ? "&check;" : ''}}
+                                    </button>
+                                    <button type="button"
+                                            (click)="sub.approved=false"
+                                            class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">
+                                        Disapprove {{sub.approved == false ? "&check;" : ''}}
+                                    </button>
+                                    <div class="flex ps-0 space-x-1 rtl:space-x-reverse sm:ps-2">
+                                        <a type="button" title="Download File"
+                                           [href]="sub.attachment?.url"
+                                           target="_blank"
+                                           class="inline-flex justify-center items-center p-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600">
+                                            <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                 fill="none" viewBox="0 0 12 20">
+                                                <path stroke="currentColor" stroke-linejoin="round" stroke-width="2"
+                                                      d="M1 6v8a5 5 0 1 0 10 0V4.5a3.5 3.5 0 1 0-7 0V13a2 2 0 0 0 4 0V6"/>
+                                            </svg>
+                                            <span *ngIf="sub?.attachment">{{sub?.attachment?.name}}</span>
+                                            <span class="sr-only">Download file</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700">
+                    </ng-container>
                 </ng-container>
             </div>
         </ng-container>

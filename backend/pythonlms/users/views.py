@@ -60,6 +60,7 @@ class UserProfileView(RetrieveAPIView):
                 "data": [
                     {
                         "name": user_profile.name,
+                        "is_admin": request.user.is_staff or request.user.is_superuser
                     }
                 ],
             }

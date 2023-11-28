@@ -25,16 +25,16 @@ export class HttpRequestInterceptor implements HttpInterceptor {
     }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        if (req.url.includes('localhost')) {
-            if (req.url.includes('localhost:8000')) {
-                // Replace the server URL with the current browser URL host
-                req = req.clone(
-                    {
-                        url: req.url.replace('localhost:8000', window.location.host)
-                    }
-                )
-            }
-        }
+        // if (req.url.includes('localhost')) {
+        //     if (req.url.includes('localhost:8000')) {
+        //         // Replace the server URL with the current browser URL host
+        //         req = req.clone(
+        //             {
+        //                 url: req.url.replace('localhost:8000', window.location.host)
+        //             }
+        //         )
+        //     }
+        // }
 
         if (this.storageService.isLoggedIn()) {
             req = req.clone({

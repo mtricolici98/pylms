@@ -3,6 +3,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {StorageService} from "./storage.service";
 import {GLOBAL_API_URL} from "./url";
+import {map} from "rxjs/operators";
 
 const AUTH_API = `http://${GLOBAL_API_URL}/api/auth/`;
 
@@ -32,11 +33,19 @@ export class AuthService {
         return this.http.post(
             AUTH_API + 'signup',
             {
-                name,
+                profile: {
+                    name: name,
+                },
                 email,
                 password,
             },
             httpOptions
+        );
+    }
+
+    getProfile(): Observable<any> {
+        return this.http.get(
+            AUTH_API + 'profile',
         );
     }
 

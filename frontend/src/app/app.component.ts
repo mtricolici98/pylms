@@ -34,8 +34,18 @@ export class AppComponent implements OnInit {
         this.isLoggedIn = this.storageService.isLoggedIn();
         if (this.isLoggedIn) {
             const user = this.storageService.getUser();
-
-            this.username = user?.email;
+            if (user) {
+                this.username = user?.email;
+                this.authService.getProfile().subscribe(
+                    {
+                        next: (data) => {
+                            this.username = data.data[0].name;
+                            user.name = data.data[0].name;
+                            this.storageService.saveUser(user);
+                        }
+                    }
+                );
+            }
         }
     }
 

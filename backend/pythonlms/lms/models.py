@@ -50,7 +50,7 @@ class HomeworkSubmission(models.Model):
         approval = 'Not Visited'
         if self.approved is not None:
             approval = 'Approved' if self.approved else 'Not Approved'
-        return (f"{approval} Submission | {self.user.get_username()} | task {self.homework.task_name} |"
+        return (f"{approval} Submission | {self.user.username} | task {self.homework.task_name} |"
                 f" {'with attachement' if self.attachment else 'no attachement'}")
 
     def __str__(self):
@@ -106,7 +106,7 @@ class LessonVisit(models.Model):
         unique_together = ['lesson', 'user']
 
     def __repr__(self):
-        return (f"Visit from {self.user.email} on {self.lesson_id} at {self.date}")
+        return f"Visit from {self.user.username} on {self.lesson_id} at {self.date}"
 
     def __str__(self):
         return repr(self)

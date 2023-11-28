@@ -51,7 +51,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     def __str__(self):
-        return self.email
+        return self.username
+
+    @property
+    def username(self):
+        return self.email if not self.profile and not self.profile.name else self.profile.name
 
     class Meta:
         """

@@ -10,7 +10,7 @@
 </button>
 <div class="flex" *ngIf="lesson">
     <aside id="sidebar-multi-level-sidebar"
-           class="fixed top-0 left-0 z-40 max-w-sm h-full max-h-full transition-transform sm:translate-x-0 overflow-y-scroll overflow-x-hidden pt-8 bg-gray-50 dark:bg-gray-800"
+           class="fixed top-0 left-0 z-40 max-w-xs h-full max-h-full transition-transform sm:translate-x-0 overflow-y-scroll overflow-x-hidden pt-8 bg-gray-50 dark:bg-gray-800"
            [class.-translate-x-full]="!navbarExtended"
            aria-label="Sidebar"
     >
@@ -99,8 +99,7 @@
             </ul>
         </div>
     </aside>
-        <div class="p-4 sm:ml-96 lg:max-w-screen-2xl sm:max-w-screen-lg w-full flex flex-wrap flex-column items-center justify-between mx-auto">
-
+    <div class="p-4 sm:ml-96 lg:max-w-screen-2xl sm:max-w-screen-lg w-full flex flex-wrap flex-column items-center justify-between mx-auto">
         <ol class="inline-flex items-center space-x-1 md:space-x-3">
             <li class="inline-flex items-center">
                 <a href="/"
@@ -140,8 +139,10 @@
                 </div>
             </li>
         </ol>
-        <app-markdown-renderer [content]="lesson.content" (headings)="onHeadingsChange($event)">
-        </app-markdown-renderer>
+        <div class="flex-col">
+            <app-markdown-renderer [content]="lesson.content" (headings)="onHeadingsChange($event)">
+            </app-markdown-renderer>
+        </div>
         <div class="w-full" *ngIf="lesson.homework">
             <app-homework-display [homework]="lesson.homework" [lesson_id]="lesson.id">
             </app-homework-display>

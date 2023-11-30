@@ -12,7 +12,8 @@ export class StorageService {
     }
 
     clean(): void {
-        window.localStorage.clear();
+        window.localStorage.removeItem(USER_KEY);
+        window.localStorage.removeItem(TOKEN_KEY);
     }
 
     public saveUser(user: User): void {

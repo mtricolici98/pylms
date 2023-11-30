@@ -45,9 +45,11 @@ class LessonGet(generics.RetrieveAPIView):
     permission_classes = (IsAuthenticated,)
     authentication_class = JSONWebTokenAuthentication
 
-    queryset = Lesson.objects.filter(available_from__lte=timezone.now())
     serializer_class = LessonFullSerializer
     lookup_url_kwarg = 'id'
+
+    def get_queryset(self):
+        return Lesson.objects.filter(available_from__lte=timezone.now())
 
 
 @api_view(['GET'])

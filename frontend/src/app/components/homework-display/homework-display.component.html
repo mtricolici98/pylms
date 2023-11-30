@@ -4,6 +4,10 @@
             class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
         Toggle Review Mode
     </button>
+    <button *ngIf="is_user_admin" (click)="is_anon = !is_anon"
+            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+        Anonymous submissions
+    </button>
     <hr class="h-px my-3 bg-gray-200 border-0 dark:bg-gray-700">
     <ng-container *ngIf="!homework.enabled">
         <div class="flex flex-col items-center mx-auto my-12">
@@ -115,6 +119,7 @@
                                 <a (click)="task.submission_edit = true"
                                    class="text-blue-600 dark:text-blue-500 hover:underline  cursor-pointer">Change
                                     solution</a>
+                                <p>{{task.submission?.comment}}</p>
                             </div>
                         </div>
                     </ng-container>
@@ -135,11 +140,18 @@
                         ReLoad Submissions
                     </button>
                     <ng-container *ngFor="let sub of task?.submissions">
-                        <h3 class="text-2xl font-bold dark:text-white mb-3">From {{sub.user.name}}</h3>
+                        <h3 class="text-2xl font-bold dark:text-white mb-3">
+                            From {{is_anon ? "Anonymous" : sub.user.name}}
+                        </h3>
                         <app-markdown-renderer [content]="getCode(sub.code)">
                         </app-markdown-renderer>
                         <form (ngSubmit)="saveSubmission(sub)">
-                            <div class="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+                            <div class="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 "
+                                 [class.border-red-700]="sub.approved == false"
+                                 [class.border-green-700]="sub.approved"
+                                 [class.border-gray-200]="sub.approved == null"
+                                 [class.dark:border-gray-600]="sub.approved == null"
+                            >
                                 <div class="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-800">
                                     <label for="comment" class="sr-only">Comment</label>
                                     <textarea id="comment" rows="4"

@@ -25,6 +25,7 @@ export class HomeworkDisplayComponent implements OnInit {
 
     is_user_admin = false;
     is_review_mode = false;
+    is_anon = true;
 
     constructor(private lessonServices: LessonService, private toastr: ToastrService, private stroage: StorageService) {
         this.is_user_admin = this.stroage.isAdmin();

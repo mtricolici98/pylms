@@ -23,7 +23,6 @@ services:
       target: nginx-build
     volumes:
       - ./nginx/:/etc/nginx/conf.d:ro
-      - ./ssl/:/etc/nginx/ssl:ro
       - static:/var/www/static:ro
       - media_data:/var/www/media:ro
     ports:

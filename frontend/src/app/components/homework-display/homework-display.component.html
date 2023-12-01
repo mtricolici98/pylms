@@ -8,6 +8,10 @@
             class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
         Anonymous submissions
     </button>
+    <button *ngIf="is_review_edit" (click)="is_review_edit = !is_review_edit"
+            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+        Review Edit Disable
+    </button>
     <hr class="h-px my-3 bg-gray-200 border-0 dark:bg-gray-700">
     <ng-container *ngIf="!homework.enabled">
         <div class="flex flex-col items-center mx-auto my-12">
@@ -141,11 +145,16 @@
                     </button>
                     <ng-container *ngFor="let sub of task?.submissions">
                         <h3 class="text-2xl font-bold dark:text-white mb-3">
-                            From {{is_anon ? "Anonymous" : sub.user.name}}
+                            From {{is_anon ? "Anonymous" : sub.user.name}} <span
+                                [class.text-green-600]="sub.approved"
+                                [class.text-red-600]="sub.approved == false"
+                        >
+                           &check;
+                        </span>
                         </h3>
                         <app-markdown-renderer [content]="getCode(sub.code)">
                         </app-markdown-renderer>
-                        <form (ngSubmit)="saveSubmission(sub)">
+                        <form (ngSubmit)="saveSubmission(sub)" *ngIf="is_review_edit">
                             <div class="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 "
                                  [class.border-red-700]="sub.approved == false"
                                  [class.border-green-700]="sub.approved"
@@ -166,12 +175,12 @@
                                         Submit
                                     </button>
                                     <button type="button"
-                                            (click)="sub.approved=true"
+                                            (click)="sub.approved=true; saveSubmission(sub)"
                                             class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
                                         Approve {{sub.approved ? "&check;" : ''}}
                                     </button>
                                     <button type="button"
-                                            (click)="sub.approved=false"
+                                            (click)="sub.approved=false; saveSubmission(sub)"
                                             class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">
                                         Disapprove {{sub.approved == false ? "&check;" : ''}}
                                     </button>

@@ -24,6 +24,7 @@ export class HomeworkDisplayComponent implements OnInit {
     lesson_id: number;
 
     is_user_admin = false;
+    is_review_edit = true;
     is_review_mode = false;
     is_anon = true;
 

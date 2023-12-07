@@ -128,6 +128,10 @@ export class HomeworkDisplayComponent implements OnInit {
             `\`\`\``;
     }
 
+    taskSubmissionsStatus(task: HomeworkTask, status: boolean | null) {
+        return task.submissions?.filter(el => el.approved == status).length;
+    }
+
     protected readonly window = window;
     protected readonly location = location;
 }
